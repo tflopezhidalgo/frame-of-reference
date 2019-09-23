@@ -38,8 +38,8 @@ void Writer::run() {
                 out->write((char*)&buffer, 4);
                 *out << to_write.getBitSize();
 
-                for (uint32_t i = 0; i < to_write.getBlockSize(); i++)
-                    *out << to_write.getWord(i);
+                for (uint8_t i : to_write.getValues())
+                    *out << i;
             }
         }
 

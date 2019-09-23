@@ -5,99 +5,106 @@
 #include <limits.h>
 #include <stdio.h>
 #include <cstring>
+#include <vector>
 
 template <class T>
 class Block{
 
     private:
-	    uint32_t block_size;
-    	T data[100];
+        std::vector<T> data;
 	    uint32_t reference;
     	uint8_t bit_size;
         bool EOF_block;
 
-    public:
-        
-        Block(int32_t size) {
-    	    this->block_size = size;
-            for(int i = 0; i < 100; i++)
-                data[i] = 0;
-    	    this->reference = 0;
-        	this->bit_size = 0;
-            this->EOF_block = false;
-        }
-   
-        Block(int32_t size, T* data) {
-    	    this->block_size = size;
-    	    this->setData(block_size, data);
-            this->reference = 0;
-        	this->bit_size = 0;
-            this->EOF_block = false;
-            this->setData(size, data);
-        }
-
-        Block(const Block& other){
-            Block(other.block_size);
-            this->block_size = other.block_size;
-            memcpy(this->data, other.data, 100);
-            this->reference = other.reference;
-            this->bit_size = other.bit_size;
-            this->EOF_block = other.EOF_block;
-        }
-    
-        Block(const Block&& other){
-            Block(other.block_size);
-            this->block_size = other.block_size;
-            memcpy(this->data, other.data, 100);
-            this->reference = other.reference;
-            this->bit_size = other.bit_size;
-            this->EOF_block = other.EOF_block;
-        }
-   
-        Block& operator=(const Block& other) = delete;
-
-        Block&& operator=(const Block&& other) = delete;
-
-        void setData(uint32_t size, T *data){
-    	    for(uint32_t i = 0; i < size; i++)
-    		    this->data[i] = data[i];
-        }
-    
-        void setBitSize(uint8_t bit_size){
-            this->bit_size = bit_size;
-        }
-    
         uint32_t findMin(){
     	    uint32_t min = UINT_MAX;
-        	for(uint32_t i = 0; i < block_size; i++)
-    	    	if(data[i] < min)
-    		    	min = data[i];
-    
+            for(T i : data){
+    	    	if(i < min)
+    		    	min = i;
+            } 
         	this->reference = min;
     	    return min;
         }
     
         uint32_t findMax(){
     	    uint32_t max = 0;
-        	for(uint32_t i = 0; i < block_size; i++)
-    	    	if(data[i] > max)
-    		    	max = data[i];
+            for(T i : data){
+    	        if(i > max)
+    		        max = i;
+            }
     
         	return max;
         }
     
-        uint32_t getBlockSize(){
-    	    return this->block_size;
-        }
-    
-        T getWord(uint32_t index){
-    	    return data[index];
-        }
-    
         void substract(uint32_t offset){
+            for(auto &i : data) 
+                i -= offset;
+        }
+
+        uint8_t countBits(uint32_t number){
+	        uint8_t size = 0;
+
+        	while (number){
+		        number = number >> 1;
+        		size++;
+        	}
+            this->bit_size = size;
+        	return size;
+        }
     
-    	    for(uint32_t i = 0; i < block_size; i++)
-        		data[i] = data[i] - offset;
+    public:
+        
+        Block(){
+            this->EOF_block = true;
+        }
+
+        Block(std::vector<T> other){
+            this->data = other;
+            this->reference = 0;
+            this->bit_size = 0;
+            this->EOF_block = false;
+        }
+
+        Block(const Block<T> &other){
+            std::cout << "Se usa contructor por copia\n";
+            this->data = other.data;
+            this->reference = other.reference;
+            this->bit_size = other.bit_size;
+            this->EOF_block = other.EOF_block;
+        }
+
+        Block(const Block<T> &&other){
+            this->data = other.data;
+            this->reference = other.reference;
+            this->bit_size = other.bit_size;
+            this->EOF_block = other.EOF_block;
+        }
+
+        Block& operator=(Block<T> &other) = delete;
+
+        Block& operator=(Block<T> &&other) = delete;
+
+        void setBitSize(uint8_t bit_size){
+            this->bit_size = bit_size;
+        }
+   
+        uint8_t getMinRepr(){
+            uint32_t min = findMin();
+            substract(min);
+            uint32_t max = findMax();
+            return countBits(max);
+        }
+
+        uint32_t getBlockSize(){
+    	    return data.size();
+        }
+   
+        T getWord(uint32_t index){
+            return data[index];
+        }
+
+        std::vector<T> getValues(){
+    	    return data;
         }
     
         uint32_t getReference(){

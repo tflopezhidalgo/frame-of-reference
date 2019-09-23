@@ -18,9 +18,6 @@ class Compressor {
 
         void setByte(uint8_t* buf1, std::vector<bool> *buffer);
 
-        void swapByte(uint8_t* byte);
-
-	    uint8_t countBits(uint32_t number);
 };
 
 #endif

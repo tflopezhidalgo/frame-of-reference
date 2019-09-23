@@ -1,9 +1,8 @@
 #include "Reader.h"
 #include "Block.h"
-#include <fstream>
-#include <netinet/in.h>
-#include <iostream>
 #include "ProtectedFile.h"
+#include <fstream>
+#include <vector>
 
 Reader::Reader(ProtectedFile* in, int32_t N, int32_t step, int32_t offset) {
     this->in = in;
@@ -16,7 +15,6 @@ Reader::Reader(ProtectedFile* in, int32_t N, int32_t step, int32_t offset) {
 }
 
 Block<uint32_t> Reader::readBlock(){
-    Block<uint32_t> readed_block(this->N); 
     uint32_t *buffer = new uint32_t[N];
 
     int32_t error = in->readBlock(buffer, N * 4 * (offset + readed_to), N);
@@ -28,9 +26,15 @@ Block<uint32_t> Reader::readBlock(){
         this->error_seted = true;
         eof_next = true;
     }
+    
+    std::vector<uint32_t> readed;
+
+    for(int i = 0; i < N; i++)
+        readed.push_back(buffer[i]);
+
+    Block<uint32_t> readed_block(readed);
 
     readed_to = step + readed_to;
-    readed_block.setData(N, buffer);
     delete[] buffer;
     return readed_block;
 }

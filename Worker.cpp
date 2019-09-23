@@ -19,14 +19,13 @@ void Worker::run(){
     while (reader.canRead()){
         Block<uint32_t> block = reader.readBlock();
         if(!reader.error_set()){
-            Block<uint8_t> compressed_block = compressor.compress(block);
-            dispatcher.dispatch(compressed_block);
+            Block<uint8_t> compressed = compressor.compress(block);
+            dispatcher.dispatch(compressed);
         }
     }
 
-    Block<uint8_t> EOF_b(0);
-    EOF_b.setEOF();
-    dispatcher.dispatch(EOF_b);
+    Block<uint8_t> eof;
+    dispatcher.dispatch(eof);
 }
 
 ProtectedQueue* Worker::getQueue(){

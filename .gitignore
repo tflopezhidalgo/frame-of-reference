@@ -8,6 +8,9 @@
 *.txt 
 !*.*
 */
+out
+tp
+
 # Compiled Object files
 *.slo
 *.lo
