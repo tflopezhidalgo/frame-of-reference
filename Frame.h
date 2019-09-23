@@ -18,8 +18,8 @@ private:
 	int32_t Q;
 	int32_t T;
     Worker worker1;
-//    Worker worker2;
-//    Worker worker3;
+    Worker worker2;
+    Worker worker3;
     Writer writer;
 
 public:

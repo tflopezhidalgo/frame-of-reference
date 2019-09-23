@@ -12,9 +12,9 @@ Frame::Frame(std::string in_f,
              int32_t Q, 
              int32_t T) :
              in(in_f),
-             worker1(&in, N, 1, 0, Q),
-//             worker2(&in, N, 3, 1, Q),                   
-//             worker3(&in, N, 3, 2, Q), 
+             worker1(&in, N, 3, 0, Q),
+             worker2(&in, N, 3, 1, Q),                   
+             worker3(&in, N, 3, 2, Q), 
              writer(o_file){
 
     this->N = N;
@@ -25,16 +25,16 @@ Frame::Frame(std::string in_f,
 void Frame::run(){
 
    writer.addQueue(worker1.getQueue());
-//   writer.addQueue(worker2.getQueue());
-///  writer.addQueue(worker3.getQueue());
+   writer.addQueue(worker2.getQueue());
+   writer.addQueue(worker3.getQueue());
 
     writer.start();
     worker1.start(); 
-//    worker2.start();
-//    worker3.start();
+    worker2.start();
+    worker3.start();
 
-//    worker3.join();
-//    worker2.join();
+    worker3.join();
+    worker2.join();
     worker1.join();
     writer.join();
 
