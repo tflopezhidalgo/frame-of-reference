@@ -41,10 +41,10 @@ threads = si
 CFLAGS = -Wall -Werror -pedantic -pedantic-errors
 
 # Para optimizar el binario resultante lo mejor posible
-CFLAGS += 
+CFLAGS += -O3
 
 # Para valgrind o debug
-CFLAGS += -ggdb -DDEBUG 
+CFLAGS += -ggdb -DDEBUG -fno-inline
 
 # Opciones del enlazador.
 #LDFLAGS =
@@ -112,7 +112,7 @@ endif
 
 # Si no especifica archivos, tomo todos.
 fuentes ?= $(wildcard *.$(extension))
-directorios = $("/home/tomas/ClionProjects/frame/src")
+directorios = $(shell find . -type d -regex '.*\w+')
 
 occ := $(CC)
 ocxx := $(CXX)
@@ -148,3 +148,4 @@ $(target): $(o_files)
 
 clean:
 	$(RM) $(o_files) $(target)
+

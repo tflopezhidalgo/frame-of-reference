@@ -5,16 +5,15 @@
 #include "Block.h"
 
 class Dispatcher {
+    private:
+        ProtectedQueue queue;
 
-private:
-    ProtectedQueue queue;
-
-public:
-	Dispatcher(uint32_t Q);
-    ProtectedQueue* getQueue();
-    void dispatch(Block <uint8_t> block);
-    void sendEOF();
-	~Dispatcher();
+    public:
+	    explicit Dispatcher(uint32_t Q);
+        ProtectedQueue* getQueue();
+        void dispatch(Block <uint8_t> block);
+        void sendEOF();
+    	~Dispatcher();
 };
 
 #endif

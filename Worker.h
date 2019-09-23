@@ -10,7 +10,6 @@
 #include <fstream>
 
 class Worker: public Thread{
-
     private:
 	    Reader reader;
     	Compressor compressor;
@@ -22,7 +21,6 @@ class Worker: public Thread{
                int32_t step, 
                int32_t offset, 
                int32_t Q);
-
         virtual void run() override;
         ProtectedQueue* getQueue();
     	~Worker();

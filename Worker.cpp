@@ -15,15 +15,13 @@ Worker::Worker(ProtectedFile* in,
                dispatcher(Q) {  }
 
 void Worker::run(){
-    
     while (reader.canRead()){
         Block<uint32_t> block = reader.readBlock();
-        if(!reader.error_set()){
+        if (block){
             Block<uint8_t> compressed = compressor.compress(block);
             dispatcher.dispatch(compressed);
         }
     }
-
     Block<uint8_t> eof;
     dispatcher.dispatch(eof);
 }
@@ -32,7 +30,5 @@ ProtectedQueue* Worker::getQueue(){
     return this->dispatcher.getQueue();
 }
 
-Worker::~Worker(){
-
-}
+Worker::~Worker(){}
 

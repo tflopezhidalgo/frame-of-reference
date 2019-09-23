@@ -12,7 +12,5 @@ void Dispatcher::dispatch(Block <uint8_t> block){
     this->queue.push(block);
 }
 
-Dispatcher::~Dispatcher() {
-
-}
+Dispatcher::~Dispatcher() {}
 

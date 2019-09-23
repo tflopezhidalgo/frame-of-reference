@@ -7,20 +7,18 @@
 #include <condition_variable>
 
 class ProtectedQueue {
+    private:
+        std::queue<Block<uint8_t>> queue;
+        std::condition_variable cv;
+        std::mutex m;
+        uint32_t size;
+        bool eof_set;
 
-private:
-
-    std::queue<Block<uint8_t>> queue;
-    std::condition_variable cv;
-    std::mutex m;
-    uint32_t size;
-    bool eof_set;
-
-public:
-	ProtectedQueue(uint32_t size);
-    void push(Block<uint8_t> block);
-    Block <uint8_t> pop();
-	~ProtectedQueue();
+    public:
+    	explicit ProtectedQueue(uint32_t size);
+        void push(Block<uint8_t> block);
+        Block <uint8_t> pop();
+    	~ProtectedQueue();
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include <mutex>
 #include <fstream>
 #include <cstdio>
+#include <string>
 
 Frame::Frame(std::string in_f, 
              std::string o_file, 
@@ -12,34 +13,29 @@ Frame::Frame(std::string in_f,
              int32_t Q, 
              int32_t T) :
              in(in_f),
-             worker1(&in, N, 3, 0, Q),
-             worker2(&in, N, 3, 1, Q),                   
-             worker3(&in, N, 3, 2, Q), 
              writer(o_file){
-
+    for (int i = 0; i < T; i++){
+        worker[i] = new Worker(&in, N, T, i, Q);
+    }
     this->N = N;
     this->T = T;
-    
 }
 
 void Frame::run(){
-
-   writer.addQueue(worker1.getQueue());
-   writer.addQueue(worker2.getQueue());
-   writer.addQueue(worker3.getQueue());
+    for (int i = 0; i < T; i++)
+        writer.addQueue(worker[i]->getQueue()); 
 
     writer.start();
-    worker1.start(); 
-    worker2.start();
-    worker3.start();
+    for (int i = 0; i < T; i++)
+        worker[i]->start(); 
 
-    worker3.join();
-    worker2.join();
-    worker1.join();
+    for (int i = 0; i < T; i++)
+        worker[i]->join();
     writer.join();
-
 }
 
 Frame::~Frame() {
+    for (int i = 0; i < T; i++)
+        delete worker[i];
 }
 

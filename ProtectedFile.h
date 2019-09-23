@@ -5,26 +5,21 @@
 #include <string>
 #include <mutex>
 #include <cstdio>
+#include <vector>
 
 class ProtectedFile{
+    private:
+        std::mutex m;
+        std::istream* in;
+        std::ifstream file;
 
-private:
-    
-    std::mutex m;
-    std::istream* in;
-    std::ifstream file;
-
-public:
-
-    ProtectedFile(std::string filename);
-
-    ProtectedFile(ProtectedFile& other) = delete;
-
-    ProtectedFile& operator=(ProtectedFile& other) = delete;
-
-    int32_t readBlock(uint32_t* buffer, int32_t from_pos, int32_t N);
-
-    ~ProtectedFile();
+    public:
+        explicit ProtectedFile(std::string filename);
+        ProtectedFile(ProtectedFile& other) = delete;
+        void readBlock(std::vector<uint32_t>* buffer, 
+                       int32_t from_pos, 
+                       int32_t N);
+        ~ProtectedFile();
 };
 
 #endif

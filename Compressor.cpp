@@ -7,23 +7,23 @@ Block<uint8_t> Compressor::compress(Block<uint32_t> block){
     int32_t packed_size = block.getBitSize() * block.getBlockSize();
     int32_t padding = 0;
 
-    while((packed_size + padding) % 8)
+    while ((packed_size + padding) % 8)
         padding++;
 
     std::vector<bool> buffer;
-    for(int i = 0; i < padding; i++){
+    for (int i = 0; i < padding; i++){
         buffer.push_back(0);
     }
 
-	for(uint32_t i = 0; i < block.getBlockSize() ; i++){
+	for (uint32_t i = 0; i < block.getBlockSize() ; i++){
 		this->reduce(&buffer, 
-                     block.getWord(block.getBlockSize() - i -1 ), 
+                     block.getWord(block.getBlockSize() - i - 1), 
                      block.getBitSize());
     }
 
     std::vector<uint8_t> out;
 
-    while(buffer.size()){
+    while (buffer.size()){
         uint8_t buff = 0;
         setByte(&buff, &buffer);
         out.push_back(buff);
@@ -37,13 +37,12 @@ Block<uint8_t> Compressor::compress(Block<uint32_t> block){
 }
 
 void Compressor::setByte(uint8_t* buf1, std::vector<bool> *buffer){
-           
-    for(int i = 0; i < 8; i++){
+    for (int i = 0; i < 8; i++){
         bool e = buffer->back();
         buffer->pop_back();
-        if(e)
+        if (e)
             *buf1 = *buf1 + 1;
-        if(i != 7)
+        if (i != 7)
             *buf1 = *buf1 << 1;
     }
 }
@@ -55,7 +54,5 @@ void Compressor::reduce(std::vector<bool> *buffer,
         buffer->push_back(number % 2);
         number = number >> 1;
     }
-
-
 }
 

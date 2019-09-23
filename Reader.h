@@ -6,25 +6,22 @@
 #include <fstream>
 
 class Reader {
+    private:
+        ProtectedFile* in;
+        int32_t N;
+        int32_t step;
+        int32_t readed_to;
+        int32_t offset;
+        bool eof;
 
-private:
-    ProtectedFile* in;
-    int32_t N;
-    int32_t step;
-    int32_t readed_to;
-    int32_t offset;
-    bool eof_next;
-    bool error_seted;
-
-public:
-	Reader(ProtectedFile* in, 
-           int32_t N, 
-           int32_t step,
-           int32_t offset);
-    Block<uint32_t> readBlock();
-    bool canRead();
-    bool error_set();
-	~Reader();
+    public:
+	    Reader(ProtectedFile* in, 
+               int32_t N, 
+               int32_t step,
+               int32_t offset);
+        Block<uint32_t> readBlock();
+        bool canRead();
+	    ~Reader();
 };
 
 #endif

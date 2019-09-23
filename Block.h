@@ -9,7 +9,6 @@
 
 template <class T>
 class Block{
-
     private:
         std::vector<T> data;
 	    uint32_t reference;
@@ -18,9 +17,10 @@ class Block{
 
         uint32_t findMin(){
     	    uint32_t min = UINT_MAX;
-            for(T i : data){
-    	    	if(i < min)
+            for (T i : data){
+    	    	if (i < min){
     		    	min = i;
+                }
             } 
         	this->reference = min;
     	    return min;
@@ -28,16 +28,17 @@ class Block{
     
         uint32_t findMax(){
     	    uint32_t max = 0;
-            for(T i : data){
-    	        if(i > max)
+            for (T i : data){
+    	        if (i > max){
     		        max = i;
+                }
             }
     
         	return max;
         }
     
         void substract(uint32_t offset){
-            for(auto &i : data) 
+            for (auto &i : data) 
                 i -= offset;
         }
 
@@ -53,12 +54,11 @@ class Block{
         }
     
     public:
-        
         Block(){
             this->EOF_block = true;
         }
 
-        Block(std::vector<T> other){
+        explicit Block(std::vector<T> other){
             this->data = other;
             this->reference = 0;
             this->bit_size = 0;
@@ -66,7 +66,6 @@ class Block{
         }
 
         Block(const Block<T> &other){
-            std::cout << "Se usa contructor por copia\n";
             this->data = other.data;
             this->reference = other.reference;
             this->bit_size = other.bit_size;
@@ -83,6 +82,10 @@ class Block{
         Block& operator=(Block<T> &other) = delete;
 
         Block& operator=(Block<T> &&other) = delete;
+
+        operator bool() const{
+            return (this->data.size() > 0); 
+        }
 
         void setBitSize(uint8_t bit_size){
             this->bit_size = bit_size;
@@ -117,10 +120,6 @@ class Block{
     
         uint8_t getBitSize(){
             return this->bit_size;
-        }
-    
-        void setEOF(){
-            this->EOF_block = true;
         }
     
         bool isEOF(){

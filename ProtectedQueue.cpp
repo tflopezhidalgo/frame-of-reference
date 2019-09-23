@@ -30,7 +30,5 @@ Block<uint8_t> ProtectedQueue::pop(){
     return std::move(element);
 }
 
-ProtectedQueue::~ProtectedQueue() {
-
-}
+ProtectedQueue::~ProtectedQueue() {}
 
