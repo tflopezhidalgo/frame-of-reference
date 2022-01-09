@@ -15,7 +15,6 @@ class Frame {
 private:
   ProtectedFile in;
   int32_t N;
-  int32_t Q;
   int32_t T;
   Worker *worker[10];
   Writer writer;

@@ -10,6 +10,7 @@
 */
 out
 tp
+frame
 
 # Compiled Object files
 *.slo

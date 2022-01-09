@@ -13,7 +13,6 @@ private:
   std::condition_variable cv;
   std::mutex m;
   uint32_t size;
-  bool eof_set;
 
 public:
   explicit ProtectedQueue(uint32_t size);

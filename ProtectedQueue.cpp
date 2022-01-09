@@ -28,7 +28,7 @@ Block<uint8_t> ProtectedQueue::pop() {
   Block<uint8_t> element = this->queue.front();
   this->queue.pop();
   cv.notify_all();
-  return std::move(element);
+  return element;
 }
 
 ProtectedQueue::~ProtectedQueue() {}

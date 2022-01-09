@@ -33,7 +33,5 @@ void ProtectedFile::readBlock(std::vector<uint32_t> *buffer, int32_t from_pos,
 }
 
 ProtectedFile::~ProtectedFile() {
-  if (file) {
-    file.close();
-  }
+  if (file) file.close();
 }
